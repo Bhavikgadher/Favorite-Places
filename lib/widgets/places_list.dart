@@ -36,7 +36,7 @@ class PlacesList extends StatelessWidget {
               builder: (ctx) => PlaceDetailScreen(place: places[index]),
             ),
           );
-        },
+         },
       ),
       itemCount: places.length,
     );

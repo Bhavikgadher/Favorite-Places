@@ -15,7 +15,26 @@ class _AddPlaceState extends ConsumerState<AddPlaceScreen> {
 
   void _savePlace() {
     final enteredTitle = _titleController.text;
-    if (enteredTitle == null || enteredTitle.isEmpty) {
+    if (enteredTitle.isEmpty) {
+      showCupertinoDialog(
+        context: context,
+        builder: (ctx) => CupertinoAlertDialog(
+          title: const Text(
+            'Enter the title',
+            style: TextStyle(color: Colors.white),
+          ),
+          actions: [
+            CupertinoDialogAction(
+              child: const Text(
+                'Ok',
+                style: TextStyle(color: Colors.blue),
+              ),
+              onPressed: () => Navigator.of(ctx).pop(),
+            )
+          ],
+        ),
+
+      );
       return;
     }
     ref.read(userPlaceProvider.notifier).addPlace(enteredTitle);
