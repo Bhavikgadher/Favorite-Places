@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:favorite_places/models/place.dart';
 import 'package:favorite_places/providers/user_places.dart';
 import 'package:favorite_places/widgets/image_input.dart';
+import 'package:favorite_places/widgets/location_input.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,15 +18,18 @@ class AddPlaceScreen extends ConsumerStatefulWidget {
 class _AddPlaceState extends ConsumerState<AddPlaceScreen> {
   final _titleController = TextEditingController();
   File? _selectedImage;
+  PlaceLocation? _selectedLocation;
 
   void _savePlace() {
     final enteredTitle = _titleController.text;
-    if (enteredTitle.isEmpty || _selectedImage == null) {
+    if (enteredTitle.isEmpty ||
+        _selectedImage == null ||
+        _selectedLocation == null) {
       showCupertinoDialog(
         context: context,
         builder: (ctx) => CupertinoAlertDialog(
           title: const Text(
-            'Enter the title',
+            'Fill the all value',
             style: TextStyle(color: Colors.white),
           ),
           actions: [
@@ -40,7 +45,9 @@ class _AddPlaceState extends ConsumerState<AddPlaceScreen> {
       );
       return;
     }
-    ref.read(userPlaceProvider.notifier).addPlace(enteredTitle, _selectedImage!);
+    ref
+        .read(userPlaceProvider.notifier)
+        .addPlace(enteredTitle, _selectedImage!, _selectedLocation!);
     Navigator.of(context).pop();
   }
 
@@ -72,6 +79,12 @@ class _AddPlaceState extends ConsumerState<AddPlaceScreen> {
             ImageInput(
               onPickImage: (image) {
                 _selectedImage = image;
+              },
+            ),
+            const SizedBox(height: 10),
+            LocationInput(
+              onSelected: (location) {
+                _selectedLocation = location;
               },
             ),
             const SizedBox(height: 16),
